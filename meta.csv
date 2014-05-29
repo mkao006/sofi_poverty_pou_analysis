@@ -1,136 +1,29 @@
-"STS_ID","TITLE_STS","TITLE_STS_SHORT","UNIT_MULT","UNIT_MEASURE","DEFINITION","OWNER","SOURCE","DATA_TYPE","SQL_DOMAIN_CODE","SQL_ELEMENT_CODE","SQL_ITEM_CODE","WDINAME","COMMENTS","TOPIC"
-"POPULATION","Total population","Total population","thousand","people","Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship--except for refugees not permanently settled in the country of asylum, who are generally considered part of the population of their country of origin. The values shown are midyear estimates.","United Nations Population Division, World Population Prospects.","United Nations Population Division","raw",,,,,,
-"AV3YPOP","Total population, 3 year averages","Total population, 3 years average",,"people","See 'Total population'.","United Nations Population Division, World Population Prospects.","United Nations Population Division","raw",,,,,,
-"TMRPAG_1.55","Minimum energy dietary requirements, pal 1.55 - excluding pregnancy allowances (kcal/day)","MDER (excluding pregnancy allowances)",,"kcal/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"TMRPAG_1.75","Minimum energy dietary requirements, pal 1.75 - excluding pregnancy allowances (kcal/day)","MDER (excluding pregnancy allowances)",,"kcal/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"TARPAG_1.85","Minimum energy dietary requirements, pal 1.55 - excluding pregnancy allowances (kcal/day)","MDER (excluding pregnancy allowances)",,"kcal/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"BIRTH_RATE","Birth rate","Birth rate",,"per 1000 people",,,,,,,,,,
-"EERDP","Extra energy required during pregnancy (kcal/day)","Extra energy required during pregnancy",,"kcal/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"MDER_1.55","Minimum energy dietary requirements, pal 1.55  (kcal/day)","MDER",,"kcal/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"AV3YMDER_1.55","Minimum energy dietary requirements, pal 1.55, 3 year averages  (kcal/day)","MDER",,"kcal/day",,"FAO","FAO, Statistics Division","processed",,,,,,
-"MDER_1.75","Minimum energy dietary requirements, pal 1.75  (kcal/day)","MDER",,"kcal/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"AV3YMDER_1.75","Minimum energy dietary requirements, pal 1.75, 3 year averages  (kcal/day)","MDER",,"kcal/day",,"FAO","FAO, Statistics Division","processed",,,,,,
-"ADER_1.85","Average energy dietary requirements, pal 1.85  (kcal/day)","ADER",,"kcal/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"AV3YADER_1.85","Average energy dietary requirements, pal 1.85, 3 year averages  (kcal/day)","ADER",,"kcal/day",,"FAO","FAO, Statistics Division","processed",,,,,,
-"DES","Dietary energy supply (kcal/cap/day)","DES",,"kcal/cap/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"AV3YDES","Dietary energy supply, 3 year averages (kcal/cap/day)","DES",,"kcal/cap/day",,"FAO","FAO, Statistics Division","processed",,,,,,
-"DESIMP","Dietary energy supply, 3 year averages (kcal/cap/day)","DES",,"kcal/cap/day",,"FAO","FAO, Statistics Division","processed",,,,,,
-"LOSS","Food losses (kcal/cap/day)","Loss",,"kcal/cap/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"DEC","Dietary energy consumption (kcal/cap/day)","DEC",,"kcal/cap/day",,"FAO","FAO, Statistics Division","raw",,,,,,
-"CV","Coefficient of variation","CV",,"number",,"FAO","FAO, Statistics Division","raw",,,,,,
-"SK","Skewness","SK",,"number",,"FAO","FAO, Statistics Division","raw",,,,,,
-"POU_DISTR","Distribution",,,"character",,"FAO","FAO, Statistics Division","raw",,,,,,
-"NOU","Number of people undernourished","Number of people undernourished",,"people","Estimated number of people at risk of undernourishment. It is calculated by applying the estimated prevalence of undernourishment to the total population in each period.","FAO","FAO, Statistics Division","raw",,,,,,
-"AV3YNOU","Number of people undernourished, 3 year averages","Number of people undernourished, 3 years average",,"people","Estimated number of people at risk of undernourishment. It is calculated by applying the estimated prevalence of undernourishment to the total population in each period. The indicator is calculated on 3 year averages.","FAO","FAO, Statistics Division","raw",,,,,,
-"POU","Prevalence of undernourishment","PoU",,"percent","Proportion of the population estimated to be at risk of caloric inadequacy. This is the traditional FAO hunger indicator, adopted as official Millenium Development Goal indicator for goal 1, target 1.9.","FAO","FAO, Statistics Division","raw",,,,,,
-"AV3YPOU","Prevalence of undernourishment, 3 year averages","PoU",,"percent","Proportion of the population estimated to be at risk of caloric inadequacy. This is the traditional FAO hunger indicator, adopted as official Millenium Development Goal indicator for goal 1, target 1.9. The indicator is calculated on 3 year averages.","FAO","FAO, Statistics Division","raw",,,,,,
-"AV3YPOU.DISS","Prevalence of undernourishment, 3 year averages","PoU",,"percent","Proportion of the population estimated to be at risk of caloric inadequacy. This is the traditional FAO hunger indicator, adopted as official Millenium Development Goal indicator for goal 1, target 1.9. The indicator is calculated on 3 year averages.","FAO","FAO, Statistics Division","raw",,,,,,
-"QV.NPV.FOOD.ID.NO","Food net production value (constant 2004-2006 I$)","Avg. value of food production","thousand","I$","See 'Agricultural production indices' in Concepts and Methods.","FAO","FAO, Statistics Division (FAOSTAT)","raw","QV",154,2054,,,"agricultural production value"
-"QV.NPV.FOOD.ID.IMP","Food net production value (constant 2004-2006 I$)","Avg. value of food production","thousand","I$","See 'Agricultural production indices' in Concepts and Methods.","FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"QV.NPV.FOOD.ID.SHP","Food net per capita production value (constant 2004-2006 I$/cap)","Avg. value of food production",,"I$/cap",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"QV.NPV.FOOD.ID.IMPSHP","Food net per capita production value (constant 2004-2006 I$/cap)","Avg. value of food production",,"I$/cap",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"QV.NPV.FOOD.ID.AV3YSHP","Food net per capita production value, 3 year averages (constant 2004-2006 I$/cap)","Avg. value of food production",,"I$/cap",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"QV.NPV.FOOD.ID.IMPAV3YSHP","Food net per capita production value, 3 year averages (constant 2004-2006 I$/cap)","Avg. value of food production",,"I$/cap",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"QV.NPV.FOOD.ID.SHPIMP","Food net per capita production value (constant 2004-2006 I$/cap)","Avg. value of food production",,"I$/cap",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"DIFF.PCFPV.IN.NO","Differences in fitting for food net per capita production value (constant 2004-2006 I$/cap)","Differences in fitting for food net per capita production value",,"I$/cap",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"PCFPV.IN.NO","Per capita food production variability (constant 2004-2006 I$)","Food production variability",,"I$/cap",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"ADESA","Average dietary energy supply adequacy (percent)","Avg. DES adequacy",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"AV3YADESA","Average dietary energy supply adequacy, 3 year averages (percent)","Avg. DES adequacy, 3 yr avg.",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"SH.H2O.SAFE.ZS","Improved water source (share of population with access)","Improved water sources",,"percent","Access to an improved water source refers to the percentage of the population with reasonable access to an adequate amount of water from an improved source, such as a household connection, public standpipe, borehole, protected well or spring, and rainwater collection. Unimproved sources include vendors, tanker trucks, and unprotected wells and springs. Reasonable access is defined as the availability of at least 20 liters a person a day from a source within one kilometer of the dwelling.","World Health Organization and United Nations Children's Fund, Joint Measurement Programme (JMP) (http://www.wssinfo.org/).","World Bank (WDI)","raw",,,,"SH.H2O.SAFE.ZS",,
-"SH.H2O.SAFE.ZS.IMP","Improved water source (share of population with access)","Improved water sources",,"percent",,,"World Bank (WDI)","processed",,,,,,
-"SH.H2O.SAFE.ZS.DISS","Improved water source (share of population with access)","Improved water sources",,"percent",,,"World Bank (WDI)","processed",,,,,,
-"SH.STA.ACSN","Improved sanitation facilities (share of population with access)","Improved sanitation",,"percent","Access to improved sanitation facilities refers to the percentage of the population with at least adequate access to excreta disposal facilities that can effectively prevent human, animal, and insect contact with excreta. Improved facilities range from simple but protected pit latrines to flush toilets with a sewerage connection. To be effective, facilities must be correctly constructed and properly maintained.","World Health Organization and United Nations Children's Fund, Joint Measurement Programme (JMP) (http://www.wssinfo.org/).","World Bank (WDI)","raw",,,,"SH.STA.ACSN",,
-"SH.STA.ACSN.IMP","Improved sanitation facilities (share of population with access)","Improved sanitation",,"percent",,,"World Bank (WDI)","processed",,,,,,
-"SH.STA.ACSN.DISS","Improved sanitation facilities (share of population with access)","Improved sanitation",,"percent",,,"World Bank (WDI)","processed",,,,,,
-"SH.STA.STNT.ZS","Percentage of children under 5 years of age who are stunted (percent)","% children stunted",,"percent","Prevalence of child malnutrition is the percentage of children under age 5 whose height for age (stunting) is more than two standard deviations below the median for the international reference population ages 0-59 months. For children up to two years old height is measured by recumbent length. For older children height is measured by stature while standing. The data are based on the WHO's new child growth standards released in 2006.","World Health Organization, Global Database on Child Growth and Malnutrition.","World Bank (WDI)","raw",,,,"SH.STA.STNT.ZS",,
-"SH.STA.WAST.ZS","Percentage of children under 5 years of age affected by wasting (percent)","% children wasted",,"percent","Wasting prevalence is the proportion of children under five whose weight for height is more than two standard deviations below the median for the international reference population ages 0-59.","World Health Organization, Global Database on Child Growth and Malnutrition.","World Bank (WDI)","raw",,,,"SH.STA.WAST.ZS",,
-"SH.STA.MALN.ZS","Percentage of children under 5 years of age who are underweight (percent)","% children underweight",,"percent","Prevalence of child malnutrition is the percentage of children under age 5 whose weight for age is more than two standard deviations below the median for the international reference population ages 0-59 months. The data are based on the WHO's new child growth standards released in 2006.","World Health Organization, Global Database on Child Growth and Malnutrition. Aggregation is based on UNICEF/WHO Joint Global Malnutrition Analysis Date Set 2011, and additional analysis by UNICEF.","World Bank (WDI)","raw",,,,"SH.STA.MALN.ZS",,
-"SH.STA.AMALN.ZS","Percentage of adults who are underweight (percent)","Adults underweight",,"percent","Percentage of adults who are underweight, as defined by a Body Mass Index (BMI) below the international reference standard of 18.5. To calculate an individualﾒs BMI, weight and height data are need.  The BMI is weight (kg) divided by squared height (m).","World Health Organization, Global Database on Body Mass Index: http://apps.who.int/bmi/index.jsp ","World Health Organization (WHO)","raw",,,,,,
-"FB.FS.GT.KCD.NO","Food supply, grand total (kcal/cap/day)","Total food supply",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",664,2901,,,
-"DIFF.PCFSV.IN.NO","Differences in fitting for food supply (differences)","Differences in fitting for food supply",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"PCFSV.IN.NO","Per capita food supply variability (kcal/cap/day)","Food supply variability",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FS.CRLS.KCD.NO","Food supply, cereals - excluding beer (kcal/cap/day)","Cereals - excluding beer",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",664,2905,,,
-"FB.FS.CRLS.KCD.IMP","Food supply, cereals - excluding beer (kcal/cap/day)","Cereals - excluding beer",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FS.SR.KCD.NO","Food supply, starchy roots (kcal/cap/day)","Starchy roots",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",664,2907,,,
-"FB.FS.SR.KCD.IMP","Food supply, starchy roots (kcal/cap/day)","Starchy roots",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FS.CRLSSR.KCD.NO","Food supply, cereals - excluding beer and starchy roots (kcal/cap/day)","Cereals - excluding beer and starchy roots",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FS.CRLSSR.KCD.IMP","Food supply, cereals - excluding beer and starchy roots (kcal/cap/day)","Cereals - excluding beer and starchy roots",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FS.CRLSSR.KCD.AV3Y","Food supply, cereals - excluding beer and starchy roots, 3 year averages (kcal/cap/day)","Cereals - excluding beer and starchy roots",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FS.CRLSSR.KCD.IMPAV3Y","Food supply, cereals - excluding beer and starchy roots, 3 year averages (kcal/cap/day)","Cereals - excluding beer and starchy roots",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.SDES.CRLSSR.KCD.AV3Y","Share of dietary energy supply derived from cereals - excluding beer and starchy roots, 3 year averages (kcal/cap/day)","% DES cereals+roots+tubers",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.SDES.CRLSSR.KCD.IMPAV3Y","Share of dietary energy supply derived from cereals - excluding beer and starchy roots, 3 year averages (kcal/cap/day)","% DES cereals+roots+tubers",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.PSQ.GT.GCD.NO","Protein supply quantity, grand total (g/cap/day)","Avg. protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",674,2901,,,
-"FB.PSQ.GT.GCD.IMP","Protein supply quantity, grand total (g/cap/day)","Avg. protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.PSQ.GT.GCD.AV3Y","Protein supply quantity, grand total, 3 year averages (g/cap/day)","Avg. protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.PSQ.GT.GCD.IMPAV3Y","Protein supply quantity, grand total, 3 year averages (g/cap/day)","Avg. protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.PSQ.AO.GCD.NO","Protein of animal origin (g/cap/day)","Avg. animal protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",674,2941,,,
-"FB.PSQ.AO.GCD.IMP","Protein of animal origin (g/cap/day)","Avg. animal protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.PSQ.AO.GCD.AV3Y","Protein of animal origin, 3 year averages (g/cap/day)","Avg. animal protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.PSQ.AO.GCD.IMPAV3Y","Protein of animal origin, 3 year averages (g/cap/day)","Avg. animal protein supply",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FSQ.GT.GCD.NO","Fat supply quantity, grand total (g/cap/day)","Fat supply quantity",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",684,2901,,,
-"FB.FSQ.GT.GCD.IMP","Fat supply quantity, grand total (g/cap/day)","Fat supply quantity",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FSQ.GT.GCD.AV3Y","Fat supply quantity, grand total , 3 year averages (g/cap/day)","Fat supply quantity",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.FSQ.GT.GCD.IMPAV3Y","Fat supply quantity, grand total , 3 year averages (g/cap/day)","Fat supply quantity",,"g/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"ADECUP","Average dietary energy consumption of the undernourished population (kcal/cap/day)","ADECUP",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"AV3YADECUP","Average dietary energy consumption of the undernourished population, 3 year averages (kcal/cap/day)","ADECUP",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"DOH","Depth of hunger (kcal/cap/day)","DOH",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"AV3YDoH","Depth of hunger, 3 year averages (kcal/cap/day)","DOH",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"DOFD","Depth of food decifit (kcal/cap/day)","Depth of food decifit",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"AV3YDoFD","Depth of food decifit, 3 year averages (kcal/cap/day)","Depth of food decifit",,"kcal/cap/day",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"PoFI","Prevalence of food inadequacy (percent)","Prevalence of food inadequacy",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"AV3YPoFI","Prevalence of food inadequacy, 3 year averages (percent)","Prevalence of food inadequacy",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"AV3YPoFI.DISS","Prevalence of food inadequacy, 3 year averages (percent)","Prevalence of food inadequacy",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"TI.IV.FEF.USD.NO","Import value, food excluding fish (USD)","Food excluding fish","thousand","US$",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","TA",5622,1982,,,
-"TI.EV.TMT.USD.NO","Export value,  total merchandise trade (USD)","Total merchandise trade","thousand","US$",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","TA",5922,10,,,
-"TI.EV.TMT.USD.AV3Y","Export value,  total merchandise trade, 3 year averages (USD)","Total merchandise trade",,"US$",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"TI.IV.FEFTMT.USD.NO","Value of food imports over total merchandise exports (percent)","Foodimports/total exports",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"TI.IV.FEFTMT.USD.AV3Y","Value of food imports over total merchandise exports, 3 year averages (percent)","Foodimports/total exports",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"RL.AREA.ARBL.HA.NO","Arable land (ha)","Arable land","thousand","ha",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","RL",5110,6621,,,
-"RL.AREA.ARBL.HA.AV3Y","Arable land, 3 year averages (ha)","Arable land","thousand","ha",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"RL.AREA.EQIRR.HA.NO","Total area equipped for irrigation (ha)","Total area equipped for irrigation","thousand","ha",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","RL",5110,6690,,,
-"RL.AREA.EQIRR.HA.SHL","Area equipped for irrigation, share of total arable land (percent)","% land equipped for irrigation",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"RL.AREA.EQIRR.HA.SHLAV3Y","Area equipped for irrigation, share of total arable land, 3 year averages (percent)","% land equipped for irrigation",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.PROD.CRLS.TN.NO","Production of cereals - excluding beer (tonnes)","Production of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",5511,2905,,,
-"FB.PROD.CRLS.TN.IMP","Production of cereals - excluding beer (tonnes)","Production of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.IMP.CRLS.TN.NO","Imports of cereals - excluding beer (tonnes)","Imports of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",5611,2905,,,
-"FB.IMP.CRLS.TN.IMP","Imports of cereals - excluding beer (tonnes)","Imports of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.EXP.CRLS.TN.NO","Exports of cereals - excluding beer (tonnes)","Exports of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","raw","FB",5911,2905,,,
-"FB.EXP.CRLS.TN.IMP","Exports of cereals - excluding beer (tonnes)","Exports of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.SUPPLY.CRLS.TN.NO","Supply of cereals - excluding beer (tonnes)","Supply of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.SUPPLY.CRLS.TN.IMP","Supply of cereals - excluding beer (tonnes)","Supply of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.SUPPLY.CRLS.TN.AV3Y","Supply of cereals - excluding beer, 3 year averages (tonnes)","Supply of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.SUPPLY.CRLS.TN.IMPAV3Y","Supply of cereals - excluding beer, 3 year averages (tonnes)","Supply of cereals - excluding beer","thousand","tonnes",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.CIDR.CRLS.TN.NO","Cereal import dependency ratio (percent)","Cereal imp. dep. Ratio",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.CIDR.CRLS.TN.IMP","Cereal import dependency ratio (percent)","Cereal imp. dep. Ratio",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.CIDR.CRLS.TN.AV3Y","Cereal import dependency ratio, 3 year averages (percent)","Cereal imp. dep. Ratio",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"FB.CIDR.CRLS.TN.IMPAV3Y","Cereal import dependency ratio, 3 year averages (percent)","Cereal imp. dep. Ratio",,"percent",,"FAO","FAO, Statistics Division (FAOSTAT)","processed",,,,,,
-"WGI.PSAVT.IN.NO","Political stability and absence of violence/terrorism (index)","Political stability",,"index","Reflects perceptions of the likelihood that the government will be destabilized or overthrown by unconstitutional or violent means, including politically-motivated violence and terrorism.","Brookings Institution (Daniel Kaufmann)"," World Bank Development Research Group (Aart Kraay)"," and World Bank Institute (Massimo Mastruzzi)","World Bank","raw",,,,"WGI.PSAVT.IN.NO"
-"AG.SRF.TOTL.K2","Surface area (sq. km)","Surface area",,"sq.km","Surface area is a country's total area, including areas under inland bodies of water and some coastal waterways.","Food and Agriculture Organization, electronic files and web site.","World Bank (WDI)","raw",,,,"AG.SRF.TOTL.K2",,
-"AG.SRF.TOTL.K2.IMP","Surface area, imputed values (sq. km)","Surface area",,"sq.km","Surface area is a country's total area, including areas under inland bodies of water and some coastal waterways.","Food and Agriculture Organization, electronic files and web site.","World Bank (WDI)","processed",,,,,,
-"AG.SRF.TOTL.K2.DISS","Surface area, imputed values for those countries with road density available (sq. km)","Surface area",,"sq.km","Surface area is a country's total area, including areas under inland bodies of water and some coastal waterways.","Food and Agriculture Organization, electronic files and web site.","World Bank (WDI)","processed",,,,,,
-"AG.SRF.TOTL.K2.DISS2","Surface area, imputed values for those countries with rail lines density available (sq. km)","Surface area",,"sq.km","Surface area is a country's total area, including areas under inland bodies of water and some coastal waterways.","Food and Agriculture Organization, electronic files and web site.","World Bank (WDI)","processed",,,,,,
-"IS.ROD.DNST.K2","Road density (km of road per 100 sq. km of land area)","Road density",,"km/100sq.km","Road density is the ratio of the length of the country's total road network to the country's land area. The road network includes all roads in the country: motorways, highways, main or national roads, secondary or regional roads, and other urban and rural roads.","International Road Federation, World Road Statistics and electronic files, except where noted.","World Bank (WDI)","raw",,,,"IS.ROD.DNST.K2",,
-"IS.ROD.DNST.K2.IMP","Road density, imputed values (km of road per 100 sq. km of land area)","Road density",,"km/100sq.km",,,"World Bank (WDI)","processed",,,,,,
-"IS.ROD.DNST.K2.DISS","Road density (km of road per 100 sq. km of land area)","Road density",,"km/100sq.km",,,"World Bank (WDI)","processed",,,,,,
-"IS.ROD.TOTL.KM","Roads, total network (km)","Total roads network",,"km","Total road network includes motorways, highways, and main or national roads, secondary or regional roads, and all other roads in a country. A motorway is a road designed and built for motor traffic that separates the traffic flowing in opposite directions.","International Road Federation, World Road Statistics and electronic files, except where noted.","World Bank (WDI)","raw",,,,"IS.ROD.TOTL.KM",,
-"IS.ROD.TOTL.KM.IMP","Roads, total network, imputed values (km)","Total roads network",,"km",,,"World Bank (WDI)","processed",,,,,,
-"IS.ROD.TOTL.KM.DISS","Roads, total network, imputed values for those countries with paved roads available(km)","Total roads network",,"km",,,"World Bank (WDI)","processed",,,,,,
-"IS.ROD.PAVE.ZS","Roads, paved (share of total roads)","% paved roads",,"percent","Paved roads are those surfaced with crushed stone (macadam) and hydrocarbon binder or bituminized agents, with concrete, or with cobblestones, as a percentage of all the country's roads, measured in length.","International Road Federation, World Road Statistics and electronic files, except where noted.","World Bank (WDI)","raw",,,,"IS.ROD.PAVE.ZS",,
-"IS.ROD.PAVE.ZS.IMP","Roads, paved, imputed values (share of total roads)","% paved roads",,"percent",,,"World Bank (WDI)","processed",,,,,,
-"IS.ROD.PAVE.ZS.DISS","Roads, paved (share of total roads)","% paved roads",,"percent",,,"World Bank (WDI)","processed",,,,,,
-"IS.RRS.TOTL.KM","Rail lines (total route-km)","Rail lines",,"km","Rail lines are the length of railway route available for train service, irrespective of the number of parallel tracks.","World Bank, Transportation, Water, and Information and Communications Technologies Department, Transport Division.","World Bank (WDI)","raw",,,,"IS.RRS.TOTL.KM",,
-"IS.RRS.TOTL.KM.IMP","Rail lines, imputed values (total route-km)","Rail lines",,"km",,,"World Bank (WDI)","processed",,,,,,
-"IS.RRS.DNST.K2","Rail lines density (total route in km per 100 square km of land area)","Rail lines density",,"km/100sq.km",,,"World Bank (WDI)","processed",,,,,,
-"IS.RRS.DNST.K2.IMP","Rail lines density, imputed values (total route in km per 100 square km of land area)","Rail lines density",,"km/100sq.km",,,"World Bank (WDI)","processed",,,,,,
-"IS.RRS.DNST.K2.DISS","Rail lines density (total route in km per 100 square km of land area)","Rail lines density",,"km/100sq.km",,,"World Bank (WDI)","processed",,,,,,
-"NY.GDP.MKTP.PP.CD","GDP, PPP (current international $)","GDP, PPP",,"current I$","PPP GDP is gross domestic product converted to international dollars using purchasing power parity rates. An international dollar has the same purchasing power over GDP as the U.S. dollar has in the United States. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current international dollars.",,"World Bank (WDI)","raw",,,,"NY.GDP.MKTP.PP.CD",,
-"FPI.IN.NO","Food price index (index, 2005 base year)","Food price index",,"index",,,,"raw",,,,,,
-"CPI.IN.NO","Consumer price index (index, 2005 base year)","Consumer price index",,"index",,,,"raw",,,,,,
-"CON.FOOD.PPP.NO","Food and non-alcoholic beverages consumption (PPP 2005)","Food and non-alcoholic beverages consumption",,"PPP 2005",,,"World Bank","raw",,,,,,
-"CON.GEN.PPP.NO","Actual individual consumption (PPP 2005)","Actual individual consumption",,"PPP 2005",,,"World Bank","raw",,,,,,
-"DFPLI.IN.NO","Domestic food price level index (index)","Domestic food price index",,"index",,,,"processed",,,,,,
-"DFPLI.IN.IMP","Domestic food price level index (index)","Domestic food price index",,"index",,,,"processed",,,,,,
-"DIFF.DFPLI.IN.NO","Differences in fitting for the domestic food price level index (differences)","Differences",,"differences",,,,"processed",,,,,,
-"DFPLIV.IN.NO","Domestic food price level index volatility (index)","Domestic food price volatility",,"index",,,,"processed",,,,,,
-"SFEP.NO","Share of food expenditure of the poor (percent)","Share of food expenditure of the poor",,"percent",,,"FAO, Statistics Division","raw",,,,,,
-"QC.PRD.CRLS.TN.NO","Crops_Cereals,Total_Production(tonnes)","Crops_Cereals,Total_Production",,"tonnes",,,"FAO, Statistics Division (FAOSTAT)","raw","QC",5510,1717,,,
+VARIABLE,VARIABLE_TITLE,TYPE,TRANSFORM,SCALE,SOFI,SOURCE
+ADESA,Average dietary energy supply adequacy,positive,,1,TRUE,raw
+BY.GDP.MKTP.PCAP,GDP per capita,positive,log,1,FALSE,constructed
+DFPLI.IN.NO,Domestic food price level index,positive,,1,TRUE,raw
+DFPLIV.IN.NO,Domestic food price level index volatility,positive,log,1,TRUE,raw
+EN.POP.DNST,Population density,positive,log,1,FALSE,raw
+FB.FS.CRLS.KCD.NO,"Food supply, cereals - excluding beer (kcal/cap/day)",positive,,1,TRUE,raw
+FB.PSQ.AO.GCD.NO,Protein of animal origin (g/cap/day),positive,,1,TRUE,raw
+FB.PSQ.GT.GCD.NO,"Protein supply quantity, grand total (g/cap/day)",positive,,1,TRUE,raw
+IS.ROD.DNST.K2,Road density (km of road per 100 sq. km of land area),proportion,logit,100,TRUE,raw
+IS.RRS.DNST.K2,Rail lines density (total route in km per 100 square km of land area),proportion,logit,100,TRUE,raw
+NY.GDP.MKTP.CD,GDP (current US$),positive,log,1,FALSE,raw
+PCFPV.IN.NO,Per capita food production variability (constant 2004-2006 I$),positive,log,1,TRUE,raw
+POPULATION,Total population,positive,log,1,TRUE,raw
+POU,Prevalence of undernourishment,proportion,logit,1,TRUE,raw
+QV.NPV.FOOD.ID.NO,Food net production value (constant 2004-2006 I$),positive,log,1,TRUE,raw
+RL.AREA.EQIRR.HA.SHL,"Area equipped for irrigation, share of total arable land (percent)",proportion,logit,100,TRUE,raw
+SFEP.NO,Share of food expenditure of the poor (percent),proportion,logit,100,TRUE,raw
+SH.H2O.SAFE.ZS,Improved water source (share of population with access),proportion,logit,100,TRUE,raw
+SH.STA.ACSN,Improved sanitation facilities (share of population with access),proportion,logit,100,TRUE,raw
+SH.STA.MALN.ZS,Percentage of children under 5 years of age who are underweight (percent),proportion,logit,100,TRUE,raw
+SH.STA.STNT.ZS,Percentage of children under 5 years of age who are stunted (percent),proportion,logit,100,TRUE,raw
+SH.STA.WAST.ZS,Percentage of children under 5 years of age affected by wasting (percent),proportion,logit,100,TRUE,raw
+SI.POV.DDAY,Poverty headcount ratio at $1.25 per day,proportion,logit,100,FALSE,raw
+SI.POV.GINI,Gini Index,proportion,logit,100,FALSE,raw
+SI.POV.NAHC,Poverty headcount ratio at national poverty line,proportion,logit,100,FALSE,raw
+SI.POV.RUHC,Poverty headcount ratio at rural poverty line,proportion,logit,100,FALSE,raw
+SP.RUR.TOTL.ZS,Rural population percentage,proportion,logit,100,FALSE,raw
+TI.IV.FEFTMT.USD.NO,Value of food imports over total merchandise exports (percent),positive,log,1,TRUE,raw
