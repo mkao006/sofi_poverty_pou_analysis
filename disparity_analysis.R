@@ -6,10 +6,6 @@
 ## NOTE (Michael): Download more indicator from the world bank for
 ##                 imputation and analysis.
 ##
-## NOTE (Michael): Variables to be created/downloaded:
-##                 (1) Road density with respect to population density.
-##                 (2) Rural population proportion
-
 
 ## NOTE (Michael): Need to have a transformation table, so I can see
 ##                 the difference of imputation.
@@ -18,6 +14,7 @@
 ##                 difference between the country with problem and
 ##                 without.
 
+library(car)
 library(zoo)
 library(data.table)
 library(lattice)
@@ -30,30 +27,14 @@ refreshPovData = FALSE
 ## Data preperation step
 ## ---------------------------------------------------------------------
 ## Load the data and remove future years
-load(file = "./Inputs/final.RData")
+load(file = "final.RData")
 fsiSubYear.df = fsi.df[fsi.df$Year %in% c(1995:2010), ]
 
 ## Read in the meta-data
-meta.df = read.csv(file = "FSImetadata13.csv", stringsAsFactors = FALSE)
+meta.dt = data.table(read.csv(file = "meta.csv",
+    stringsAsFactors = FALSE))
 
-
-## Select the variables in the final disseminated food security
-## indicator
-determinantVariables = c("FAOST_CODE", "Year", "ADESA",
-    "QV.NPV.FOOD.ID.NO", "FB.FS.CRLS.KCD.NO", "FB.PSQ.GT.GCD.NO",
-    "FB.PSQ.AO.GCD.NO", "IS.ROD.DNST.K2",
-    "IS.RRS.DNST.K2", "DFPLI.IN.NO", "SH.H2O.SAFE.ZS", "SH.STA.ACSN",
-    "RL.AREA.EQIRR.HA.SHL", "TI.IV.FEFTMT.USD.NO",
-    "WGI.PSAVT.IN.NO", "DFPLIV.IN.NO", "PCFPV.IN.NO")
-
-outcomeVariables = c("POU", "SFEP.NO",
-    "SH.STA.WAST.ZS", "SH.STA.MALN.ZS", "SH.STA.STNT.ZS")
-
-otherVariables = c("POPULATION")
-allVariables =  c(determinantVariables, outcomeVariables, otherVariables)
-
-
-## country name table
+## Country name table
 countryNamesTable =
     data.table(FAOcountryProfile[, c("FAOST_CODE", "FAO_TABLE_NAME")])
 countryNamesTable[FAOST_CODE == 357,
@@ -71,124 +52,99 @@ countryNamesTable[FAOST_CODE == 206,
 
 ## Download poverty and GINI data
 if(refreshPovData){
-    pov.lst = getWDItoSYB(indicator = c("SI.POV.DDAY", "SI.POV.GINI",
-                              "SI.POV.NAHC",
-                              "NY.GDP.MKTP.CD", "SI.POV.RUHC",
-                              "SP.RUR.TOTL.ZS", "EN.POP.DNST"))
-    pov.df = merge(pov.lst$entity,
+    pov.lst =
+        getWDItoSYB(indicator = meta.dt[!SOFI & SOURCE == "raw",
+                        VARIABLE])
+    pov.dt = data.table(merge(pov.lst$entity,
         FAOcountryProfile[, c("ISO2_WB_CODE", "FAOST_CODE")],
-        all.x = TRUE)
-    pov.df$ISO2_WB_CODE = NULL
-    pov.df$Country = NULL
-    save(pov.df, file = "poverty.Rdata")
+        all.x = TRUE))
+    pov.dt[, `:=`(ISO2_WB_CODE = NULL, Country = NULL)]
+    ## pov.df$ISO2_WB_CODE = NULL
+    ## pov.df$Country = NULL
+    save(pov.dt, file = "poverty.Rdata")
 }
 
 load("poverty.Rdata")
      
 ## Final unimputed data set
-final.dt = data.table(fsiSubYear.df[, allVariables])
-finalVariables = c(allVariables,
-    c("SI.POV.DDAY", "SI.POV.GINI", "NY.GDP.MKTP.CD", "SI.POV.RUHC",
-      "SI.POV.NAHC", "SP.RUR.TOTL.ZS", "EN.POP.DNST"))
-final.dt = merge(final.dt, data.table(pov.df),
-    by = c("FAOST_CODE", "Year"))
+final.dt =
+    data.table(fsiSubYear.df[, c("FAOST_CODE", "Year",
+                                 meta.dt[SOFI & SOURCE == "raw",
+                                         VARIABLE])])
+final.dt = merge(final.dt, pov.dt, by = c("FAOST_CODE", "Year"))
 setkeyv(final.dt, c("FAOST_CODE", "Year"))
+final.dt[, Year := as.integer(Year)]
 
 ## Check the sparsity
 sapply(final.dt, FUN = function(x) round(sum(is.na(x))/length(x) * 100))
 
+## Check variable type
+sapply(final.dt, FUN = function(x) range(x, na.rm = TRUE))
+
+## Make correction to irrigation share of arable land.
+final.dt[RL.AREA.EQIRR.HA.SHL >= 100, RL.AREA.EQIRR.HA.SHL := 100]
+
+## Data transformation step:
+## ---------------------------------------------------------------------
+
+## Scale proportion data
+scaleString = paste0("`:=`(",
+    paste0(meta.dt[SCALE != 1, VARIABLE], " = ",
+           meta.dt[SCALE != 1, VARIABLE], "/",
+           meta.dt[SCALE != 1, SCALE], collapse = ", "), ")")
+final.dt[, eval(parse(text = scaleString))]
 
 
 ## Some data transformation for normality and interpretation
-
-## Division by 100 and Inverse logistic transformation for proportion.
-final.dt[, SH.H2O.SAFE.ZS := SH.H2O.SAFE.ZS/100]
-final.dt[, SH.STA.ACSN := SH.STA.ACSN/100]
-final.dt[, SH.STA.WAST.ZS := SH.STA.WAST.ZS/100]
-final.dt[, SH.STA.MALN.ZS := SH.STA.MALN.ZS/100]
-final.dt[, SH.STA.STNT.ZS := SH.STA.STNT.ZS/100]
-final.dt[, SI.POV.DDAY := SI.POV.DDAY/100]
-final.dt[, SI.POV.GINI := SI.POV.GINI/100]
-final.dt[, SI.POV.RUHC := SI.POV.RUHC/100]
-final.dt[, SI.POV.NAHC := SI.POV.NAHC/100]
-final.dt[, IS.ROD.DNST.K2 := IS.ROD.DNST.K2/100]
-final.dt[, IS.RRS.DNST.K2 := IS.RRS.DNST.K2/100]
-final.dt[, SP.RUR.TOTL.ZS := SP.RUR.TOTL.ZS/100]
-
 invlogit = function(x){
     x = ifelse(x == 1, 1 - 1e-5,
         ifelse(x == 0, 0 + 1e-5, x))
     log(x/(1 - x))
 }
 
-final.dt[, SH.H2O.SAFE.ZS := invlogit(SH.H2O.SAFE.ZS)]
-final.dt[, SH.STA.ACSN := invlogit(SH.STA.ACSN)]
-final.dt[, SH.STA.WAST.ZS := invlogit(SH.STA.WAST.ZS)]
-final.dt[, SH.STA.MALN.ZS := invlogit(SH.STA.MALN.ZS)]
-final.dt[, SH.STA.STNT.ZS := invlogit(SH.STA.STNT.ZS)]
-final.dt[, SI.POV.DDAY := invlogit(SI.POV.DDAY)]
-final.dt[, SI.POV.GINI := invlogit(SI.POV.GINI)]
-final.dt[, SI.POV.RUHC := invlogit(SI.POV.RUHC)]
-final.dt[, SI.POV.NAHC := invlogit(SI.POV.NAHC)]
-final.dt[, IS.RRS.DNST.K2 := invlogit(IS.RRS.DNST.K2)]
-final.dt[, IS.ROD.DNST.K2 := invlogit(IS.ROD.DNST.K2)]
-final.dt[, SP.RUR.TOTL.ZS := invlogit(SP.RUR.TOTL.ZS)]
-final.dt[, POU := invlogit(POU)]
-
-final.dt[, Year := as.integer(Year)]
-
-## Log transformation for highly skewed data
-final.dt[, QV.NPV.FOOD.ID.NO := log(QV.NPV.FOOD.ID.NO)]
-final.dt[, DFPLIV.IN.NO := log(DFPLIV.IN.NO)]
-final.dt[, PCFPV.IN.NO := log(PCFPV.IN.NO)]
-final.dt[, POPULATION := log(POPULATION)]
-final.dt[, NY.GDP.MKTP.CD := log(NY.GDP.MKTP.CD)]
-final.dt[, EN.POP.DNST:= log(EN.POP.DNST)]
+transformString = paste0("`:=`(",
+    paste0(meta.dt[!is.na(TRANSFORM) & SOURCE == "raw", VARIABLE], " = ",
+           ifelse(meta.dt[!is.na(TRANSFORM) & SOURCE == "raw",
+                          TRANSFORM] == "logit", "invlogit(", "log("),
+           meta.dt[!is.na(TRANSFORM) & SOURCE == "raw", VARIABLE], ")",
+           collapse = ", "), ")")
+final.dt[, eval(parse(text = transformString))]
 
 ## Removing strange countries
 final.dt = final.dt[FAOST_CODE != 164, ]
 final.dt = final.dt[FAOST_CODE != 186, ]
 
+plotString =
+    paste0("~ ", paste0(colnames(final.dt)[-c(1, 2)], collapse = " + "))
+scatterplotMatrix(eval(parse(text = plotString)), data = final.dt,
+                  smoother = FALSE, use = "pairwise.complete.obs")
+
+
 ## Imputation Step
 ## ---------------------------------------------------------------------
 
 ## Create bounds for imputation
+
 variableType = sapply(final.dt, typeof)
 boundColumns = which(variableType == "double")
-boundUpper = ifelse(grepl("ZS", names(boundColumns)), 10000,
-    sapply(final.dt[, names(boundColumns), with = FALSE],
-           max, na.rm = TRUE) +
-    2 * sapply(final.dt[, names(boundColumns), with = FALSE], sd,
-               na.rm = TRUE))
-boundLower = ifelse(grepl("ZS", names(boundColumns)), -10000, 0)
+boundUpper = sapply(final.dt[, names(boundColumns), with = FALSE],
+    max, na.rm = TRUE) +
+         2 * sapply(final.dt[, names(boundColumns), with = FALSE], sd,
+                    na.rm = TRUE)
+boundLower = sapply(final.dt[, names(boundColumns), with = FALSE],
+    max, na.rm = TRUE) -
+         2 * sapply(final.dt[, names(boundColumns), with = FALSE], sd,
+                    na.rm = TRUE)
 boundsMatrix = matrix(c(boundColumns, boundLower, boundUpper),
     byrow = FALSE, nc = 3)
 rownames(boundsMatrix) = names(boundColumns)
 
-## Manual bounds
-boundsMatrix["SH.STA.ACSN", 2] = -10000
-boundsMatrix["SH.STA.ACSN", 3] = 10000
-boundsMatrix["SI.POV.DDAY", 2] = -10000
-boundsMatrix["SI.POV.DDAY", 3] = 10000
-boundsMatrix["SI.POV.GINI", 2] = -10000
-boundsMatrix["SI.POV.GINI", 3] = 10000
-boundsMatrix["SI.POV.RUHC", 2] = -10000
-boundsMatrix["SI.POV.RUHC", 3] = 10000
-boundsMatrix["SI.POV.NAHC", 2] = -10000
-boundsMatrix["SI.POV.NAHC", 3] = 10000
-boundsMatrix["POU", 2] = -10000
-boundsMatrix["POU", 3] = 10000
-boundsMatrix["WGI.PSAVT.IN.NO", 2] = -4
-boundsMatrix[c("QV.NPV.FOOD.ID.NO", "DFPLIV.IN.NO", "PCFPV.IN.NO",
-               "POPULATION", "NY.GDP.MKTP.CD"), 2] = 
-    sapply(final.dt[, c("QV.NPV.FOOD.ID.NO", "DFPLIV.IN.NO",
-                        "PCFPV.IN.NO", "POPULATION", "NY.GDP.MKTP.CD"),
-                    with = FALSE],
-           min, na.rm = TRUE) -
-    sapply(final.dt[, c("QV.NPV.FOOD.ID.NO", "DFPLIV.IN.NO",
-                        "PCFPV.IN.NO", "POPULATION", "NY.GDP.MKTP.CD"),
-                    with = FALSE], sd,
-               na.rm = TRUE)
+## lower bounds for untransformed variable
+boundsMatrix[meta.dt[SOURCE == "raw" &
+                     TRANSFORM == "" &
+                     TYPE == "positive", VARIABLE],
+             2] = 0
+
 
 ## linear interpolation for available data
 myApprox = function(x){
@@ -209,22 +165,28 @@ for(i in colnames(final.dt)[-c(1:2)]){
 ## multiply impute the data set
 imputed.am = amelia(final.dt, ts = "Year", cs = "FAOST_CODE",
     lag = c("ADESA", "POPULATION"), 
-    p2s = 1, bounds = boundsMatrix, m = 20)
-
-## tscsPlot(imputed.am, cs = "208", var = "SH.STA.STNT.ZS")
+    p2s = 1, bounds = boundsMatrix, m = 10)
 
 ## Combine the multiple imputation by fitting loess
-tmp = Reduce(f = function(x, y) rbind(x, y),
-    x = imputed.am$imputations)
-evalString = paste0("list(", paste0(paste0(finalVariables[!finalVariables
-    %in% c("FAOST_CODE", "Year")],
-    "= predict(loess(", finalVariables[!finalVariables %in%
-                                  c("FAOST_CODE", "Year")],
+mi = Reduce(f = function(x, y) rbind(x, y), x = imputed.am$imputations)
+combineString =
+    paste0("list(", paste0(paste0(meta.dt[SOURCE == "raw", VARIABLE],
+    "= predict(loess(", meta.dt[SOURCE == "raw", VARIABLE],
     " ~ Year, span = 0.85, loess.control(surface = 'direct')),",
     "newdata = data.frame(Year = 1995:2010))"),
     collapse = ", "), ")")
-imputed.dt = tmp[, eval(parse(text = evalString)), by = c("FAOST_CODE")]
+imputed.dt = mi[, eval(parse(text = combineString)), by = "FAOST_CODE"]
 imputed.dt[, Year := rep(1995:2010, length(unique(FAOST_CODE)))]
+
+## Plot the relationship of the result
+plotString =
+    paste0("~ ", paste0(colnames(imputed.dt)[colnames(imputed.dt) !=
+                                             c("FAOST_CODE", "Year")],
+                        collapse = " + "))
+scatterplotMatrix(eval(parse(text = plotString)), data = imputed.dt,
+                  smoother = FALSE, use = "pairwise.complete.obs")
+
+## Merge with name table and set keys
 imputed.dt = merge(imputed.dt, countryNamesTable, by = "FAOST_CODE")
 imputed.dt = merge(imputed.dt,
     data.table(FAOregionProfile[, c("FAOST_CODE", "UNSD_MACRO_REG",
@@ -252,20 +214,14 @@ logit = function(x){
     1/(1 + exp(-x))
 }
 
-imputed.dt[, SH.H2O.SAFE.ZS := logit(SH.H2O.SAFE.ZS)]
-imputed.dt[, SH.STA.ACSN := logit(SH.STA.ACSN)]
-imputed.dt[, SH.STA.WAST.ZS := logit(SH.STA.WAST.ZS)]
-imputed.dt[, SH.STA.MALN.ZS := logit(SH.STA.MALN.ZS)]
-imputed.dt[, SH.STA.STNT.ZS := logit(SH.STA.STNT.ZS)]
-imputed.dt[, POU := logit(POU)]
-imputed.dt[, SI.POV.DDAY := logit(SI.POV.DDAY)]
-imputed.dt[, SI.POV.GINI := logit(SI.POV.GINI)]
-imputed.dt[, SI.POV.RUHC := logit(SI.POV.RUHC)]
-imputed.dt[, SI.POV.NAHC := logit(SI.POV.NAHC)]
-imputed.dt[, SP.RUR.TOTL.ZS:= logit(SP.RUR.TOTL.ZS)]
-imputed.dt[, DFPLIV.IN.NO := exp(DFPLIV.IN.NO)]
-imputed.dt[, PCFPV.IN.NO := exp(PCFPV.IN.NO)]
 
+backTransformString = paste0("`:=`(",
+    paste0(meta.dt[!is.na(TRANSFORM) & SOURCE == "raw", VARIABLE], " = ",
+           ifelse(meta.dt[!is.na(TRANSFORM) & SOURCE == "raw",
+                          TRANSFORM] == "logit", "logit(", "exp("),
+           meta.dt[!is.na(TRANSFORM) & SOURCE == "raw", VARIABLE], ")",
+           collapse = ", "), ")")
+imputed.dt[, eval(parse(text = backTransformString))]
 
 ## ## These variables are not back transformed for visualization
 ## imputed.dt[, IS.RRS.DNST.K2 := logit(IS.RRS.DNST.K2)]
@@ -275,55 +231,6 @@ imputed.dt[, PCFPV.IN.NO := exp(PCFPV.IN.NO)]
 ## imputed.dt[, NY.GDP.MKTP.CD := exp(NY.GDP.MKTP.CD)]
 ## imputed.dt[, QV.NPV.FOOD.ID.NO := exp(QV.NPV.FOOD.ID.NO)]
 
-
-## Define categorical variables for interpretation
-imputed.dt[, levelADESA := ifelse(ADESA < 90, "veryLow",
-                            ifelse(ADESA >= 80 & ADESA < 100, "low",
-                                   ifelse(ADESA >= 100 & ADESA < 115,
-                                          "sufficient", "high")))]
-imputed.dt[, levelADESA :=
-           factor(levelADESA,
-                  levels = c("veryLow", "low", "sufficient", "high"))]
-imputed.dt[, levelSH.STA.STNT.ZS := ifelse(SH.STA.STNT.ZS < 0.05,
-                                     "veryLow",
-                            ifelse(SH.STA.STNT.ZS >= 0.05 &
-                                   SH.STA.STNT.ZS < 0.1, "low",
-                                   ifelse(SH.STA.STNT.ZS >= 0.1 &
-                                          SH.STA.STNT.ZS < 0.3,
-                                          "high", "veryHigh")))]
-imputed.dt[, levelSH.STA.STNT.ZS :=
-           factor(levelSH.STA.STNT.ZS,
-                  levels = c("veryLow", "low", "high", "veryHigh"))]
-imputed.dt[, levelSH.STA.STNT.ZS :=
-           ifelse(SH.STA.STNT.ZS < 0.05, "veryLow",
-                            ifelse(SH.STA.STNT.ZS >= 0.05 &
-                                   SH.STA.STNT.ZS < 0.1, "low",
-                                   ifelse(SH.STA.STNT.ZS >= 0.1 &
-                                          SH.STA.STNT.ZS < 0.3,
-                                          "high", "veryHigh")))]
-imputed.dt[, levelSH.STA.STNT.ZS :=
-           factor(levelSH.STA.STNT.ZS,
-                  levels = c("veryLow", "low", "high", "veryHigh"))]
-imputed.dt[, levelSH.STA.MALN.ZS :=
-           ifelse(SH.STA.MALN.ZS < 0.02, "veryLow",
-                            ifelse(SH.STA.MALN.ZS >= 0.02 &
-                                   SH.STA.MALN.ZS < 0.05, "low",
-                                   ifelse(SH.STA.MALN.ZS >= 0.05 &
-                                          SH.STA.MALN.ZS < 0.2,
-                                          "high", "veryHigh")))]
-imputed.dt[, levelSH.STA.MALN.ZS :=
-           factor(levelSH.STA.MALN.ZS,
-                  levels = c("veryLow", "low", "high", "veryHigh"))]
-imputed.dt[, levelSH.STA.WAST.ZS :=
-           ifelse(SH.STA.WAST.ZS < 0.025, "veryLow",
-                            ifelse(SH.STA.WAST.ZS >= 0.02 &
-                                   SH.STA.WAST.ZS < 0.05, "low",
-                                   ifelse(SH.STA.WAST.ZS >= 0.05 &
-                                          SH.STA.WAST.ZS < 0.15,
-                                          "high", "veryHigh")))]
-imputed.dt[, levelSH.STA.WAST.ZS :=
-           factor(levelSH.STA.WAST.ZS,
-                  levels = c("veryLow", "low", "high", "veryHigh"))]
 
 
 
@@ -338,19 +245,251 @@ xyplot(logit(POU) ~ logit(SI.POV.DDAY), data = final.dt,
        )
 
 
-xyplot(POU ~ SI.POV.DDAY, data = imputed.dt[Year == 2009,],
-       panel = function(x, y){
-           panel.xyplot(x, y, type = c("g", "p", "r"))
-           panel.abline(0, 1)
-           panel.abline(h = 0.10, col = "red")
-           panel.abline(v = 0.10, col = "red")
-           }
-       )
+with(imputed.dt[Year == 2009, ],
+     {
+         plot(SI.POV.DDAY, POU, xlim = c(0, 1), ylim = c(0, 1),
+              type = "n")
+         text(SI.POV.DDAY, POU, labels = FAO_TABLE_NAME)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
 
+with(imputed.dt[Year == 2009, ],
+     {
+         plot(SI.POV.NAHC, POU, xlim = c(0, 1), ylim = c(0, 1),
+              type = "n")
+         text(SI.POV.NAHC, POU, labels = FAO_TABLE_NAME)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+
+## Load and compare the nasometrix with world bank estimate
+povNasometrix.df = read.csv("poverty_nasometrix.csv",
+    stringsAsFactors = FALSE)
+povNasometrix.df$level = with(povNasometrix.df,
+    ifelse(right == "X", "right",
+           ifelse(too.high == "X", "too.high",
+                  ifelse(too.low == "X", "too.low", NA))))
+povNasometrix.dt = data.table(fillCountryCode(data = povNasometrix.df,
+    country = "country"))
+povNasometrix.dt[country == "Cote d'Iviore", FAOST_CODE := 107]
+povNasometrix.dt = povNasometrix.dt[!is.na(FAOST_CODE), ]
+povNasometrix.dt[, Year := 2010]
+povNasometrix.dt[, `:=`(right = NULL, too.high = NULL, too.low = NULL)]
+setkeyv(povNasometrix.dt, c("FAOST_CODE", "Year"))
+setnames(x = povNasometrix.dt, old = "should.be.about",
+         new = "nasometrix")
+povNasometrix.dt[, nasometrix := nasometrix/100]
+povCompare.dt = merge(povNasometrix.dt,
+    imputed.dt[, list(FAOST_CODE, Year, POU, SI.POV.DDAY, SI.POV.NAHC,
+                      SI.POV.RUHC, SI.POV.GINI)], all.x = TRUE)
+
+## Looks like the nasometrix are around the same with the world bank
+## estimate, but adjust many countries which are below 5%
+with(povCompare.dt,
+     {
+         plot(nasometrix, SI.POV.DDAY, xlim = c(0, 1), ylim = c(0, 1))
+         abline(a = 0, b = 1)
+     }
+     )
+
+## The nasometrix is almost stricly below the national poverty line
+with(povCompare.dt,
+     {
+         plot(nasometrix, SI.POV.NAHC, xlim = c(0, 1), ylim = c(0, 1))
+         abline(a = 0, b = 1)
+     }
+     )
+
+nasometrixCountry = povCompare.dt[level == "right", FAOST_CODE]
+
+## Keeping country where Josef and Piero consider that the poverty is
+## valid.
+with(imputed.dt[Year == 2009 & FAOST_CODE %in% nasometrixCountry, ],
+     {
+         plot(SI.POV.DDAY, POU, xlim = c(0, 1), ylim = c(0, 1),
+              type = "n")
+         text(SI.POV.DDAY, POU, labels = FAO_TABLE_NAME)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+
+
+
+
+
+## POU comparison between international and national poverty line
+## pdf(file = "onetwentyfive_national_pou_comparison.pdf",
+##     width = 20, height = 15)
+par(mfrow = c(2, 1), mar = c(1, 4.1, 2.1, 2.1))
+with(imputed.dt[Year == 2009, ],
+     {
+         plot(SI.POV.DDAY, POU, type = "n", xlim = c(0, 1),
+              ylim = c(0, 1), axes = FALSE,
+              ylab = "Prevalence of Undernourishment");
+         box()
+         text(SI.POV.DDAY, POU, labels = FAO_TABLE_NAME,
+              cex = 0.8)
+         text(1, 0.05, "Poverty headcount ratio at $1.25/day", adj = 1,
+              cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+legend("topleft",  legend = c("45 degeree line", "50% deviation"),
+       lty = c(1, 2), lwd = c(1, 2), bty = "n", col = "red")
+par(mar = c(3.1, 4.1, 0, 2.1))
+with(imputed.dt[Year == 2009, ],
+     {
+         plot(SI.POV.NAHC, POU, type = "n", xlim = c(0, 1),
+              ylim = c(0, 1),
+              ylab = "Prevalence of Undernourishment");
+         text(SI.POV.NAHC, POU, labels = FAO_TABLE_NAME,
+              cex = 0.8)
+         text(1, 0.05,
+              "Poverty headcount ratio at national poverty line",
+              adj = 1, cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+## graphics.off()
+
+## international versus national and rural poverty line
+## pdf(file = "onetwentyfive_national_rural_comparison.pdf",
+##     width = 20, height = 15)
+par(mfrow = c(2, 1), mar = c(1, 4.1, 2.1, 2.1))
+with(imputed.dt[Year == 2009, ],
+     {
+         plot(SI.POV.NAHC, SI.POV.DDAY, type = "n", xlim = c(0, 1),
+              ylim = c(0, 1), axes = FALSE,
+              ylab = "Poverty headcount ratio at $1.25/day");
+         box()
+         text(SI.POV.NAHC, SI.POV.DDAY, labels = FAO_TABLE_NAME,
+              cex = 0.8)
+         text(1, 0.05, "National poverty line", adj = 1, cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+legend("topleft",  legend = c("45 degeree line", "50% deviation"),
+       lty = c(1, 2), lwd = c(1, 2), bty = "n", col = "red")
+par(mar = c(3.1, 4.1, 0, 2.1))
+with(imputed.dt[Year == 2009, ],
+     {
+         plot(SI.POV.RUHC, SI.POV.DDAY, type = "n", xlim = c(0, 1),
+              ylim = c(0, 1),
+              ylab = "Poverty headcount ratio at $1.25/day");
+         text(SI.POV.RUHC, SI.POV.DDAY, labels = FAO_TABLE_NAME,
+              cex = 0.8)
+         text(1, 0.05, "Rural poverty line", adj = 1, cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+## graphics.off()
+
+
+## examine countries in the lower left corner by log transform the data
+with(imputed.dt[Year == 2009, ],
+     {
+         plot(log(SI.POV.NAHC), log(SI.POV.DDAY), type = "n",
+              ylab = "Poverty headcount ratio at $1.25/day",
+              xlab = "Poverty headcount ratio at national poverty line",
+              axes = FALSE);
+         axis(1, at = seq(-4, 0, by = 1),
+              labels = round(exp(seq(-4, 0, by = 1)), 2))
+         axis(2, at = seq(-15, 0, by = 5),
+              labels = round(exp(seq(-15, 0, by = 5)), 5))
+         box()
+         text(log(SI.POV.NAHC), log(SI.POV.DDAY),
+              labels = FAO_TABLE_NAME,
+              cex = 0.8)
+         text(1, 0.05, "National poverty line", adj = 1, cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+legend("topleft",  legend = c("45 degeree line", "50% deviation"),
+       lty = c(1, 2), lwd = c(1, 2), bty = "n", col = "red")
+
+with(final.dt[Year %in% 2005:2009, ],
+     {
+         plot(log(logit(SI.POV.NAHC)), log(logit(SI.POV.DDAY)),
+              type = "n",
+              ylab = "Poverty headcount ratio at $1.25/day",
+              xlab = "Poverty headcount ratio at national poverty line",
+              axes = FALSE);
+         axis(1, at = seq(-4, 0, by = 1),
+              labels = round(exp(seq(-4, 0, by = 1)), 2))
+         axis(2, at = seq(-15, 0, by = 5),
+              labels = round(exp(seq(-15, 0, by = 5)), 5))
+         box()
+         text(log(logit(SI.POV.NAHC)), log(logit(SI.POV.DDAY)),
+              labels = FAO_TABLE_NAME,
+              cex = 0.8)
+         text(1, 0.05, "National poverty line", adj = 1, cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+legend("topleft",  legend = c("45 degeree line", "50% deviation"),
+       lty = c(1, 2), lwd = c(1, 2), bty = "n", col = "red")
+
+
+
+## This is a verification that the relationship is not a result of
+## imputation
+par(mfrow = c(2, 1), mar = c(1, 4.1, 2.1, 2.1))
+with(final.dt[Year %in% 2005:2009, ],
+     {
+         plot(logit(SI.POV.NAHC), logit(SI.POV.DDAY), type = "n",
+              xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
+              ylab = "Poverty headcount ratio at $1.25/day");
+         box()
+         text(logit(SI.POV.NAHC), logit(SI.POV.DDAY),
+              labels = FAO_TABLE_NAME, cex = 0.8)
+         text(1, 0.05, "National poverty line", adj = 1, cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
+legend("topleft",  legend = c("45 degeree line", "50% deviation"),
+       lty = c(1, 2), lwd = c(1, 2), bty = "n", col = "red")
+par(mar = c(3.1, 4.1, 0, 2.1))
+with(final.dt[Year %in% 2005:2009, ],
+     {
+         plot(logit(SI.POV.RUHC), logit(SI.POV.DDAY), type = "n",
+              xlim = c(0, 1), ylim = c(0, 1),
+              ylab = "Poverty headcount ratio at $1.25/day");
+         text(logit(SI.POV.RUHC), logit(SI.POV.DDAY),
+              labels = FAO_TABLE_NAME, cex = 0.8)
+         text(1, 0.05, "Rural poverty line", adj = 1, cex = 1.5)
+         abline(a = 0, b = 1, col = "red", lwd = 2)
+         abline(a = 0, b = 1.5, col = "red", lty = 2)
+         abline(a = 0, b = 1/1.5, col = "red", lty = 2)
+     }
+     )
 
 ## NOTE (Michael): Re-write this section so that the density
 ##                 comparison are specific to those year where
 ##                 undernourishment is more prevalent than poverty.
+
+
+
 
 ## Peculiar countries to be investigated
 highPOU.dt = final.dt[logit(POU)/logit(SI.POV.DDAY) >= 2 &
@@ -399,10 +538,10 @@ varNameTable.df[varNameTable.df$examineVars == "BY.GDP.MKTP.PCAP",
 
 examineCountry = unique(imputed.dt$FAOST_CODE)
 ## examineCountry = unique(imputed.dt[IS.ROD.DNST.K2 <= -6 & IS.RRS.DNST.K2 <= -6 & ADESA <= 100 & SP.RUR.TOTL.ZS >= 0.7 & BY.GDP.MKTP.PCAP >= 6.5, FAOST_CODE])
-examineCountry = unique(imputed.dt[SI.POV.DDAY >= 0.1 & POU >= 0.1 & POU/SI.POV.DDAY >= 1.5, FAOST_CODE])
+examineCountry = unique(imputed.dt[Year == 2009 & SI.POV.DDAY < 0.1 & POU >= 0.1 & POU/SI.POV.DDAY >= 1.5, FAOST_CODE])
 for(j in examineCountry){
     print(examineCountry)
-    pdf(file = paste0("./multivar_examine_plot/",
+    pdf(file = paste0("./exploratory_analysis/",
             FAOcountryProfile[which(FAOcountryProfile$FAOST_CODE == j),
                               "FAO_TABLE_NAME"], ".pdf"),
         width = 21 ,height = 21)
@@ -457,18 +596,61 @@ for(j in examineCountry){
     graphics.off()
 }
 
-## examineCountryName = unique(imputed.dt[IS.ROD.DNST.K2 <= -6 & IS.RRS.DNST.K2 <= -6 & ADESA <= 100 & SP.RUR.TOTL.ZS >= 0.7 & BY.GDP.MKTP.PCAP >= 6.5, FAO_TABLE_NAME])
-(examineCountryName = unique(imputed.dt[SI.POV.DDAY >= 0.1 & POU >= 0.1 & POU/SI.POV.DDAY >= 1.5, FAO_TABLE_NAME)])
-for(i in examineCountryName){
-    system(paste0("evince ./multivar_examine_plot/", i, ".pdf&"))
-}
-
 
 
 ## Old questions to be answered
 ## ---------------------------------------------------------------------
 
 
+
+## Define categorical variables for interpretation
+imputed.dt[, levelADESA := ifelse(ADESA < 90, "veryLow",
+                            ifelse(ADESA >= 80 & ADESA < 100, "low",
+                                   ifelse(ADESA >= 100 & ADESA < 115,
+                                          "sufficient", "high")))]
+imputed.dt[, levelADESA :=
+           factor(levelADESA,
+                  levels = c("veryLow", "low", "sufficient", "high"))]
+imputed.dt[, levelSH.STA.STNT.ZS := ifelse(SH.STA.STNT.ZS < 0.05,
+                                     "veryLow",
+                            ifelse(SH.STA.STNT.ZS >= 0.05 &
+                                   SH.STA.STNT.ZS < 0.1, "low",
+                                   ifelse(SH.STA.STNT.ZS >= 0.1 &
+                                          SH.STA.STNT.ZS < 0.3,
+                                          "high", "veryHigh")))]
+imputed.dt[, levelSH.STA.STNT.ZS :=
+           factor(levelSH.STA.STNT.ZS,
+                  levels = c("veryLow", "low", "high", "veryHigh"))]
+imputed.dt[, levelSH.STA.STNT.ZS :=
+           ifelse(SH.STA.STNT.ZS < 0.05, "veryLow",
+                            ifelse(SH.STA.STNT.ZS >= 0.05 &
+                                   SH.STA.STNT.ZS < 0.1, "low",
+                                   ifelse(SH.STA.STNT.ZS >= 0.1 &
+                                          SH.STA.STNT.ZS < 0.3,
+                                          "high", "veryHigh")))]
+imputed.dt[, levelSH.STA.STNT.ZS :=
+           factor(levelSH.STA.STNT.ZS,
+                  levels = c("veryLow", "low", "high", "veryHigh"))]
+imputed.dt[, levelSH.STA.MALN.ZS :=
+           ifelse(SH.STA.MALN.ZS < 0.02, "veryLow",
+                            ifelse(SH.STA.MALN.ZS >= 0.02 &
+                                   SH.STA.MALN.ZS < 0.05, "low",
+                                   ifelse(SH.STA.MALN.ZS >= 0.05 &
+                                          SH.STA.MALN.ZS < 0.2,
+                                          "high", "veryHigh")))]
+imputed.dt[, levelSH.STA.MALN.ZS :=
+           factor(levelSH.STA.MALN.ZS,
+                  levels = c("veryLow", "low", "high", "veryHigh"))]
+imputed.dt[, levelSH.STA.WAST.ZS :=
+           ifelse(SH.STA.WAST.ZS < 0.025, "veryLow",
+                            ifelse(SH.STA.WAST.ZS >= 0.02 &
+                                   SH.STA.WAST.ZS < 0.05, "low",
+                                   ifelse(SH.STA.WAST.ZS >= 0.05 &
+                                          SH.STA.WAST.ZS < 0.15,
+                                          "high", "veryHigh")))]
+imputed.dt[, levelSH.STA.WAST.ZS :=
+           factor(levelSH.STA.WAST.ZS,
+                  levels = c("veryLow", "low", "high", "veryHigh"))]
 
 
 
